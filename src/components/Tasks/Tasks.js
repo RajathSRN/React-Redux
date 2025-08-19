@@ -1,7 +1,7 @@
 import React from "react";
 import "./Tasks.css"; // Assuming you have a CSS file for styling
 import Collapsible from "../Collapsible/Collapsible";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import actions from "../../actions";
 import { toDisplayableDateFormat } from "../../utils";
@@ -13,16 +13,23 @@ function Tasks() {
   let [taskTitle, setTaskTitle] = useState("");
   let [taskDateTime, setTaskDateTime] = useState("");
   let [search, setSearch] = useState("");
-  
-  // state from redux store
-  let tasks = useSelector(state => state.tasks);
-
-  let filteredTasks = tasks.filter(task => {
-    return task.taskTitle.toLowerCase().indexOf(search.toLowerCase()) >= 0;
-  });
 
   // create dispatch function
   let dispatch = useDispatch();
+  
+  //run on first render
+  useEffect(() => { 
+    dispatch(actions.fetchTasks());
+  }, [dispatch]);
+
+  // state from redux store
+  let tasks = useSelector((state) => state.tasks);
+
+  let filteredTasks = tasks.filter((task) => {
+    return task.taskTitle.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+  });
+  
+  
 
   let onSaveClick = () => { 
     // Dispatch an action to save the new task
