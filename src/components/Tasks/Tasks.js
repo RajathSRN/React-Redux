@@ -24,11 +24,12 @@ function Tasks() {
 
   // state from redux store
   let tasks = useSelector((state) => state.tasks);
-
-  let filteredTasks = tasks.filter((task) => {
-    return task.taskTitle.toLowerCase().indexOf(search.toLowerCase()) >= 0;
-  });
-  
+  let filteredTasks = [];
+  if(tasks && tasks.data.length > 0) {
+    filteredTasks = tasks.data.filter((task) => {
+      return task.taskTitle.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+    });
+  }
   
 
   let onSaveClick = () => { 
@@ -60,7 +61,8 @@ function Tasks() {
       <div className="container">
         <div className="app-title-container">
           <div className="app-title">
-            <h1>Tasks</h1>
+            <h1>Tasks&nbsp;{tasks.loading ? <i className="fa fa-spinner fa-spin"></i> : null}</h1>
+            {tasks.error ? <h2>{tasks.error.message}</h2> : null}
           </div>
           <div className="create-button-container">
             {isNewTaskOpen === false ? <button className="button create-button" onClick={() => setIsNewTaskOpen(!isNewTaskOpen)}>
