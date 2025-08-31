@@ -4,8 +4,7 @@ import allReducers from "../reducers";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk"
 import {createLogger} from "redux-logger"
-import * as actionTypes from "../constants/action-types";
-import { v1 as uuid } from "uuid";
+import reduxPromiseMiddleware from "redux-promise-middleware";
 
 // const logger = createLogger({
 //   collapsed: true,
@@ -23,20 +22,12 @@ const logger = createLogger({
   diff: true
 });
 
-//creating custom middleware
-const myLogger = (store) => (next) => (action) => {
-  console.log("Logged Action by my custom middleware action: ", action);
-  console.log("Logged Action by my custom middleware next: ", next);
-  console.log("Logged Action by my custom middleware store: ", store);
-  if (action.type === actionTypes.CREATE_TASK_REQUEST) {
-    action.payload.id = uuid();
-  }
-  next(action);
-};
+//creating middleware array
+const middleware = [thunk, reduxPromiseMiddleware, logger];
 
 var store = createStore(
   allReducers,
-  composeWithDevTools(applyMiddleware(myLogger, thunk, logger))
+  composeWithDevTools(applyMiddleware(...middleware))
 );
 
 export default store;
