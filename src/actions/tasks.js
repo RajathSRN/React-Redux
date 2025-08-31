@@ -1,56 +1,42 @@
 import * as actionTypes from "../constants/action-types";
 import axios from "axios";
 
-export const createTask = (newTask) => async(dispatch) => {
-  dispatch({ type: actionTypes.CREATE_TASK_REQUEST, payload: newTask });
-  try {
-    const response = await axios.post("http://localhost:5000/tasks", newTask);
-    dispatch({
-      type: actionTypes.CREATE_TASK_SUCCESS,
-      payload: response.data
-    });
-  } catch (error) {
-    console.error("Error creating task:", error);
-    dispatch({
-      type: actionTypes.CREATE_TASK_ERROR,
-      payload: error
-    });
-  }
-};
+/**
+ * Action creator to create a new task.
+ * Returns an action with a promise payload for redux-promise-middleware.
+ * we automatically get
+ * CREATE_TASK_PENDING, CREATE_TASK_FULFILLED, and CREATE_TASK_REJECTED actions
+ *
+ * @param {Object} newTask - The new task object to be created.
+ * @returns {Object} Redux action with type and promise payload.
+ */
+export const createTask = (newTask) => ({
+  type: actionTypes.CREATE_TASK,
+  payload: axios.post("http://localhost:5000/tasks", newTask)
+});
 
-export const deleteTask = (taskId) => async (dispatch) => {
-  dispatch({ type: actionTypes.DELETE_TASK_REQUEST });
-  try {
-    await axios.delete(`http://localhost:5000/tasks/${taskId}`);
-    dispatch({
-      type: actionTypes.DELETE_TASK_SUCCESS,
-      payload: taskId
-    });
-  } catch (error) {
-    console.error("Error deleting task:", error);
-    dispatch({
-      type: actionTypes.DELETE_TASK_ERROR,
-      payload: error
-    });
-  }
-};
 
-export const fetchTasks = () => async (dispatch) => {
-  try {
-    dispatch({ type: actionTypes.FETCH_TASKS_REQUEST });
-    const response = await axios.get("http://localhost:5000/tasks");
-    //const response = await fetch("http://localhost:5000/tasks", { method: "GET" });
-    //const data = await response.json();
-    // Dispatch an action to store the fetched tasks in the Redux store
-    dispatch({
-      type: actionTypes.FETCH_TASKS_SUCCESS,
-      payload: response.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: actionTypes.FETCH_TASKS_ERROR,
-      payload: error,
-    });
-    console.error("Error fetching tasks:", error);
-  }
-};
+/**
+ * Action creator to delete a task.
+ * Returns an action with a promise payload for redux-promise-middleware.
+ * we automatically get
+ * DELETE_TASK_PENDING, DELETE_TASK_FULFILLED, and DELETE_TASK_REJECTED actions
+ *
+ * @param {number} taskId - The ID of the task to be deleted.
+ * @returns {Object} Redux action with type and promise payload.
+ */
+export const deleteTask = (taskId) => ({
+  type: actionTypes.DELETE_TASK,
+  payload: axios.delete(`http://localhost:5000/tasks/${taskId}`)
+});
+
+/**
+ * Fetch tasks from the server
+ * when using redux promise middleware we automatically get
+ * FETCH_TASKS_PENDING, FETCH_TASKS_FULFILLED, and FETCH_TASKS_REJECTED actions
+ * @returns {Promise} - A promise that resolves to the list of tasks
+ */
+export const fetchTasks = () => ({
+  type: actionTypes.FETCH_TASKS,
+  payload: axios.get("http://localhost:5000/tasks")
+});
