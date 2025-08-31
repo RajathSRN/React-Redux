@@ -2,7 +2,7 @@ import * as actionTypes from "../constants/action-types";
 import axios from "axios";
 
 export const createTask = (newTask) => async(dispatch) => {
-  dispatch({ type: actionTypes.CREATE_TASK_REQUEST });
+  dispatch({ type: actionTypes.CREATE_TASK_REQUEST, payload: newTask });
   try {
     const response = await axios.post("http://localhost:5000/tasks", newTask);
     dispatch({
