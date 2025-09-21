@@ -14,8 +14,12 @@ const taskReducer = (state = initialState, action) => {
         case actionTypes.DELETE_TASK_PENDING:
             return {data: state.data, loading: true, error: ""};
         case actionTypes.DELETE_TASK_FULFILLED:{
-            let id = Number(action.payload.config.url.substr(action.payload.config.url.lastIndexOf('/') + 1));
-            return {data: state.data.filter(task => task.id !== id), loading: false, error: ""};
+            //commenting this as we are not using redux-promise-middleware
+            /* let id = Number(action.payload.config.url.substr(action.payload.config.url.lastIndexOf('/') + 1));
+            return {data: state.data.filter(task => task.id !== id), loading: false, error: ""}; 
+            */
+           //saga approach
+           return {data: state.data.filter(task => task.id !== action.payload), loading: false, error: ""};
         }
         case actionTypes.DELETE_TASK_REJECTED:
             return {data: state.data, loading: false, error: action.payload};

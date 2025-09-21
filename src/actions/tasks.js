@@ -1,5 +1,5 @@
 import * as actionTypes from "../constants/action-types";
-import axios from "axios";
+//import axios from "axios";//to be used in thunk approach
 
 /**
  * Action creator to create a new task.
@@ -10,11 +10,18 @@ import axios from "axios";
  * @param {Object} newTask - The new task object to be created.
  * @returns {Object} Redux action with type and promise payload.
  */
-export const createTask = (newTask) => ({
+////Commenting thunk approach
+/* export const createTask = (newTask) => ({
   type: actionTypes.CREATE_TASK,
   payload: axios.post("http://localhost:5000/tasks", newTask)
 });
+ */
 
+//saga approach
+export const createTask = (newTask) => ({
+  type: actionTypes.CREATE_TASK,
+  payload: newTask
+});
 
 /**
  * Action creator to delete a task.
@@ -25,9 +32,16 @@ export const createTask = (newTask) => ({
  * @param {number} taskId - The ID of the task to be deleted.
  * @returns {Object} Redux action with type and promise payload.
  */
+//Commenting thunk approach
+/* export const deleteTask = (taskId) => ({
+  type: actionTypes.DELETE_TASK,
+  payload: axios.delete(`http://localhost:5000/tasks/${taskId}`),
+}); */
+
+//saga approach
 export const deleteTask = (taskId) => ({
   type: actionTypes.DELETE_TASK,
-  payload: axios.delete(`http://localhost:5000/tasks/${taskId}`)
+  payload: taskId
 });
 
 /**
@@ -36,7 +50,13 @@ export const deleteTask = (taskId) => ({
  * FETCH_TASKS_PENDING, FETCH_TASKS_FULFILLED, and FETCH_TASKS_REJECTED actions
  * @returns {Promise} - A promise that resolves to the list of tasks
  */
-export const fetchTasks = () => ({
+//Commenting thunk approach
+/* export const fetchTasks = () => ({
   type: actionTypes.FETCH_TASKS,
-  payload: axios.get("http://localhost:5000/tasks")
+  payload: axios.get("http://localhost:5000/tasks"),
+}); */
+
+//saga approach to fetch tasks
+export const fetchTasks = () => ({
+  type: actionTypes.FETCH_TASKS
 });

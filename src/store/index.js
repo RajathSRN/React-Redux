@@ -5,11 +5,16 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk"
 import {createLogger} from "redux-logger"
 import reduxPromiseMiddleware from "redux-promise-middleware";
+import createSagaMiddleware from "redux-saga";
+import { rootSaga } from "../sagas";
 
 // const logger = createLogger({
 //   collapsed: true,
 //   diff: true
 // });
+
+//saga middleware
+let saga = createSagaMiddleware();
 
 //expand if error object returned
 const logger = createLogger({
@@ -23,11 +28,14 @@ const logger = createLogger({
 });
 
 //creating middleware array
-const middleware = [thunk, reduxPromiseMiddleware, logger];
+const middleware = [thunk, saga, reduxPromiseMiddleware, logger];
 
 var store = createStore(
-  allReducers,
+  allReducers, {},
   composeWithDevTools(applyMiddleware(...middleware))
 );
+
+//invoke root saga
+saga.run(rootSaga);
 
 export default store;

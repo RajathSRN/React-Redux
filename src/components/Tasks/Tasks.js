@@ -19,7 +19,8 @@ function Tasks() {
   
   //run on first render
   useEffect(() => { 
-    dispatch(actions.fetchTasks());
+    //dispatch(actions.fetchTasks());//using thunk
+    dispatch(actions.fetchTasks());//using saga
   }, [dispatch]);
 
   // state from redux store
